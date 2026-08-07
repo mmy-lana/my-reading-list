@@ -1,18 +1,23 @@
 import React from "react";
 import "./Hero.css";
 
+import kazumaImg from "../../assets/images/kazuma.jpg";
+import tsunaImg from "../../assets/images/tsuna.jpg";
+import mikaImg from "../../assets/images/mika_p.jpg";
+import teresaImg from "../../assets/images/teresa.jpeg";
+
 const Hero: React.FC = () => {
   const images = [
-    { src: require("../../assets/images/kazuma.jpg"), alt: "Kazuma" },
-    { src: require("../../assets/images/tsuna.jpg"), alt: "Tsuna" },
-    { src: require("../../assets/images/mika_p.jpg"), alt: "Mika" },
-    { src: require("../../assets/images/teresa.jpeg"), alt: "Teresa" },
-    { src: require("../../assets/images/kazuma.jpg"), alt: "Kazuma" },
-    { src: require("../../assets/images/tsuna.jpg"), alt: "Tsuna" },
-    { src: require("../../assets/images/mika_p.jpg"), alt: "Mika" },
-    { src: require("../../assets/images/teresa.jpeg"), alt: "Teresa" },
-    { src: require("../../assets/images/mika_p.jpg"), alt: "Mika" },
-    { src: require("../../assets/images/teresa.jpeg"), alt: "Teresa" },
+    { src: kazumaImg, alt: "Kazuma" },
+    { src: tsunaImg, alt: "Tsuna" },
+    { src: mikaImg, alt: "Mika" },
+    { src: teresaImg, alt: "Teresa" },
+    { src: kazumaImg, alt: "Kazuma" },
+    { src: tsunaImg, alt: "Tsuna" },
+    { src: mikaImg, alt: "Mika" },
+    { src: teresaImg, alt: "Teresa" },
+    { src: mikaImg, alt: "Mika" },
+    { src: teresaImg, alt: "Teresa" },
   ];
 
   return (

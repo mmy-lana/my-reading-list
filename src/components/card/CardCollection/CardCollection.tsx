@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 import Card from "../Card/Card";
 import { Swiper, SwiperSlide } from "swiper/react";
-import "swiper/swiper-bundle.css";
+import "swiper/css";
+import "swiper/css/navigation";
 
-// Correct way to import Navigation in Swiper v11+
 import { Navigation } from "swiper/modules";
 import SwiperCore from "swiper";
 import Modal from "../../modal/Modal";

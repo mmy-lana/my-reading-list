@@ -1,6 +1,36 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
+
+@theme {
+  --color-primary: #D946EF;
+  --color-primary-hover: #C026D3;
+  --color-primary-light: #F9E8FC;
+
+  --color-background: #FFFFFF;
+  --color-background-secondary: #F7FAFC;
+
+  --color-text-primary: #1A202C;
+  --color-text-secondary: #718096;
+
+  --color-border: #E2E8F0;
+
+  --color-dark-primary: #D946EF;
+  --color-dark-hover: #F472B6;
+  --color-dark-light: #4A5568;
+
+  --color-backgroundDark: #1A202C;
+  --color-backgroundDark-secondary: #2D3748;
+
+  --color-textDark-primary: #E2E8F0;
+  --color-textDark-secondary: #A0AEC0;
+
+  --color-borderDark: #4A5568;
+
+  --font-helvetica: "Helvetica Neue", Arial, sans-serif;
+  --shadow-card: 0px 4px 8px rgba(0, 0, 0, 0.1);
+  --shadow-card-dark: 0px 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* Helvetica Neue Light (300) */
 
 /* Helvetica Neue Light (300) */
 @font-face {
