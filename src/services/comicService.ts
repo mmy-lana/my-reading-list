@@ -12,22 +12,36 @@ import { seedInitialData } from "./seedService";
 
 const COMICS_COLLECTION = "comics";
 
-export async function fetchAllComics(): Promise<ComicItem[]> {
-  const comicsRef = collection(db, COMICS_COLLECTION);
-  const snapshot = await getDocs(comicsRef);
+import { initialComicData } from "./seedService";
 
-  if (snapshot.empty) {
-    await seedInitialData();
-    const reSnapshot = await getDocs(comicsRef);
-    return reSnapshot.docs.map((docSnap) => ({
-      ...(docSnap.data() as ComicItem),
-      id: docSnap.id,
-    }));
+export async function fetchAllComics(): Promise<ComicItem[]> {
+  try {
+    const comicsRef = collection(db, COMICS_COLLECTION);
+    const snapshot = await getDocs(comicsRef);
+
+    if (snapshot.empty) {
+      await seedInitialData();
+      const reSnapshot = await getDocs(comicsRef);
+      if (!reSnapshot.empty) {
+        return reSnapshot.docs.map((docSnap) => ({
+          ...(docSnap.data() as ComicItem),
+          id: docSnap.id,
+        }));
+      }
+    } else {
+      return snapshot.docs.map((docSnap) => ({
+        ...(docSnap.data() as ComicItem),
+        id: docSnap.id,
+      }));
+    }
+  } catch (err) {
+    console.warn("Firestore connection unavailable, using local seed fallback:", err);
   }
 
-  return snapshot.docs.map((docSnap) => ({
-    ...(docSnap.data() as ComicItem),
-    id: docSnap.id,
+  // Guaranteed fallback dataset if Firestore is offline or unconfigured
+  return initialComicData.map((item, idx) => ({
+    ...item,
+    id: `local-seed-${item.no || idx}`,
   }));
 }
 

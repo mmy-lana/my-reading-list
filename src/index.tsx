@@ -1,14 +1,16 @@
 import React from "react";
-import ReactDOM from "react-dom/client"; // React 18 syntax
-import "./index.css"; // Tailwind CSS and custom styles
+import ReactDOM from "react-dom/client";
+import "./index.css";
 import App from "./App";
+import { injectWatermark } from "./utils/watermark";
 
-// Create the root element for rendering
+// Inject obfuscated watermark signature on startup
+injectWatermark();
+
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
 );
 
-// Render the App component inside the root element
 root.render(
   <React.StrictMode>
     <App />
