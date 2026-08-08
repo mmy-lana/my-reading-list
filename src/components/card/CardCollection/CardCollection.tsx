@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import Card from "../Card/Card";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import "swiper/css/navigation";
@@ -7,19 +6,19 @@ import "swiper/css/navigation";
 import { Navigation } from "swiper/modules";
 import SwiperCore from "swiper";
 import Modal from "../../modal/Modal";
+import { ComicItem } from "../../../services/firebase";
+import EvervaultTopTenCard from "../EvervaultTopTenCard";
+import DingoLastReadCard from "../DingoLastReadCard";
+import InfiniteMovingNewTitles from "../InfiniteMovingNewTitles";
 
 // Register the Navigation module
 SwiperCore.use([Navigation]);
-
-import { ComicItem } from "../../../services/firebase";
 
 interface CardCollectionProps {
   lastReadData: ComicItem[];
   newTitlesData: ComicItem[];
   topTenData: ComicItem[];
 }
-
-const FALLBACK_COVER = "https://images.unsplash.com/photo-1578632767115-351597cf2477?w=300&auto=format&fit=crop&q=80";
 
 const CardCollection: React.FC<CardCollectionProps> = ({
   lastReadData,
@@ -36,9 +35,9 @@ const CardCollection: React.FC<CardCollectionProps> = ({
 
   return (
     <div className="w-full max-w-7xl h-full mx-auto px-4">
-      {/* Top 10 */}
-      <div className="mb-10">
-        <h2 className="text-2xl font-bold mb-6 text-primary">Top 10</h2>
+      {/* Top 10 Section: Evervault Cards */}
+      <div className="mb-12">
+        <h2 className="text-2xl font-extrabold mb-6 text-primary tracking-tight">Top 10 Rated</h2>
         <Swiper
           spaceBetween={16}
           breakpoints={{
@@ -52,71 +51,53 @@ const CardCollection: React.FC<CardCollectionProps> = ({
         >
           {topTenData.map((item, index) => (
             <SwiperSlide key={item.id || index}>
-              <Card
-                onClick={() => openModal(item)}
+              <EvervaultTopTenCard
+                item={item}
                 index={index}
-                img={item.img && item.img.trim() !== "" ? item.img : FALLBACK_COVER}
-                title={item.title}
-                chapter={item.chapter}
-                score={item.rating}
-                status={item.status}
+                onClick={() => openModal(item)}
               />
             </SwiperSlide>
           ))}
         </Swiper>
       </div>
 
-      {/* Last Read */}
-      <div className="mb-8">
-        <h2 className="text-xl font-bold mb-6">Last Reading</h2>
+      {/* Last Reading Section: Old Dingo 81 Glowing Glass Cards */}
+      <div className="mb-12">
+        <h2 className="text-2xl font-extrabold mb-6 text-primary tracking-tight">Last Reading</h2>
         <Swiper
-          spaceBetween={10} // Space between the cards
-          slidesPerView={3} // Show 3 cards at a time
+          spaceBetween={16}
+          breakpoints={{
+            320: { slidesPerView: 2 },
+            640: { slidesPerView: 3 },
+            768: { slidesPerView: 4 },
+            1024: { slidesPerView: 5 },
+          }}
           navigation
-          loop={true}
-          style={{ padding: "0 1rem" }} // Add padding to the left and right of the Swiper container
+          style={{ padding: "0.5rem 0.25rem" }}
         >
           {lastReadData.map((item, index) => (
             <SwiperSlide key={item.id || index}>
-              <Card
-                onClick={() => openModal(item)}
+              <DingoLastReadCard
+                item={item}
                 index={index}
-                img={item.img && item.img.trim() !== "" ? item.img : FALLBACK_COVER}
-                title={item.title}
-                chapter={item.chapter}
-                score={item.rating}
-                status={item.status}
+                onClick={() => openModal(item)}
               />
             </SwiperSlide>
           ))}
         </Swiper>
       </div>
 
-      {/* New Add Titles */}
-      <div className="mb-8">
-        <h2 className="text-xl font-bold mb-6">New Add Title</h2>
-        <Swiper
-          spaceBetween={10} // Space between the cards
-          slidesPerView={3} // Show 3 cards at a time
-          navigation
-          loop={true}
-          style={{ padding: "0 1rem" }} // Add padding to the left and right of the Swiper container
-        >
-          {newTitlesData.map((item, index) => (
-            <SwiperSlide key={item.id || index}>
-              <Card
-                onClick={() => openModal(item)}
-                index={index}
-                img={item.img && item.img.trim() !== "" ? item.img : FALLBACK_COVER}
-                title={item.title}
-                chapter={item.chapter}
-                score={item.rating}
-                status={item.status}
-              />
-            </SwiperSlide>
-          ))}
-        </Swiper>
+      {/* New Add Titles Section: Infinite Moving Marquee Ribbon */}
+      <div className="mb-12">
+        <h2 className="text-2xl font-extrabold mb-4 text-primary tracking-tight">New Add Titles</h2>
+        <InfiniteMovingNewTitles
+          items={newTitlesData}
+          speed="normal"
+          onCardClick={(item) => openModal(item)}
+        />
       </div>
+
+      {/* Detail Modal */}
       {selectedCard && (
         <Modal
           isOpen={isModalOpen}
