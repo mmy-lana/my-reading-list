@@ -1,29 +1,32 @@
 import React from "react";
 import NavbarFooterContainer from "../shared/NavbarFooterContainer";
+import { useLanguage } from "../../utils/i18n";
 
 const Footer: React.FC = () => {
+  const { t } = useLanguage();
+
   return (
     <NavbarFooterContainer>
       <div className="w-full h-full p-4">
         <div className="text-center">
           <p className="mb-2">
             <a href="/" className="hover:underline">
-              Home
+              {t.home}
             </a>{" "}
             |{" "}
             <a href="/about" className="hover:underline">
-              About
+              {t.about}
             </a>{" "}
             |{" "}
             <a href="/tech" className="hover:underline">
-              Tech I Use
+              {t.tech}
             </a>
           </p>
           <p className="text-sm mb-2">
-            This site is a personal project for managing my reading list.
+            {t.footerDesc}
           </p>
           <p className="text-sm mb-2">
-            © {new Date().getFullYear()} My Reading List. All Rights Reserved.
+            © {new Date().getFullYear()} {t.appName}. {t.rightsReserved}.
           </p>
         </div>
       </div>

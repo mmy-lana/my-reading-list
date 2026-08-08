@@ -9,7 +9,7 @@
   position: relative;
 }
 
-.banner .slider {
+/* .banner .slider {
   position: absolute;
   width: 200px;
   height: 250px;
@@ -28,6 +28,21 @@
   to {
     transform: perspective(1000px) rotateX(-15deg) rotateY(360deg);
   }
+} */
+
+.banner .slider {
+  position: absolute;
+  width: 200px;
+  height: 250px;
+  top: 10%;
+  left: calc(50% - 100px);
+  transform-style: preserve-3d;
+  transform: perspective(1000px);
+  z-index: 2;
+}
+
+.banner .slider.manual-rotate {
+  animation: none !important;
 }
 
 .banner .slider .item {
