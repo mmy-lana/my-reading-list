@@ -11,6 +11,7 @@ import Home from "./pages/home/Home";
 import Login from "./pages/login/Login";
 import PrivateRoute from "./pages/privateRoute/PrivateRoute";
 import { injectWatermark } from "./utils/watermark";
+import AdminDashboard from "./components/admin/AdminDashboard";
 
 function App() {
   useEffect(() => {
@@ -22,8 +23,9 @@ function App() {
       <ThemeProvider>
         <Router>
           <div className="min-h-screen bg-background text-text-primary dark:bg-backgroundDark dark:text-textDark-primary transition-colors duration-300">
-            <Routes>
+                        <Routes>
               <Route path="/" element={<Home />} />
+              <Route path="/admin" element={<AdminDashboard />} />
               <Route element={<PrivateRoute />}>
                 <Route path="/dashboard" element={<div>Dashboard</div>} />
               </Route>

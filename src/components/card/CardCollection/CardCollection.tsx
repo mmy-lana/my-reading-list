@@ -11,18 +11,12 @@ import Modal from "../../modal/Modal";
 // Register the Navigation module
 SwiperCore.use([Navigation]);
 
-interface CardData {
-  img: string;
-  title: string;
-  chapter: number;
-  score: number;
-  status: string;
-}
+import { ComicItem } from "../../../services/firebase";
 
 interface CardCollectionProps {
-  lastReadData: CardData[];
-  newTitlesData: CardData[];
-  topTenData: CardData[];
+  lastReadData: ComicItem[];
+  newTitlesData: ComicItem[];
+  topTenData: ComicItem[];
 }
 
 const CardCollection: React.FC<CardCollectionProps> = ({
@@ -31,9 +25,9 @@ const CardCollection: React.FC<CardCollectionProps> = ({
   topTenData,
 }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [selectedCard, setSelectedCard] = useState<CardData | null>(null);
+  const [selectedCard, setSelectedCard] = useState<ComicItem | null>(null);
 
-  const openModal = (card: CardData) => {
+  const openModal = (card: ComicItem) => {
     setSelectedCard(card);
     setIsModalOpen(true);
   };
@@ -51,14 +45,14 @@ const CardCollection: React.FC<CardCollectionProps> = ({
           style={{ padding: "0 1rem" }} // Add padding to the left and right of the Swiper container
         >
           {topTenData.map((item, index) => (
-            <SwiperSlide key={index}>
+            <SwiperSlide key={item.id || index}>
               <Card
                 onClick={() => openModal(item)}
                 index={index}
-                img={item.img}
+                img={item.img || "https://via.placeholder.com/150"}
                 title={item.title}
                 chapter={item.chapter}
-                score={item.score}
+                score={item.rating}
                 status={item.status}
               />
             </SwiperSlide>
@@ -77,14 +71,14 @@ const CardCollection: React.FC<CardCollectionProps> = ({
           style={{ padding: "0 1rem" }} // Add padding to the left and right of the Swiper container
         >
           {lastReadData.map((item, index) => (
-            <SwiperSlide key={index}>
+            <SwiperSlide key={item.id || index}>
               <Card
                 onClick={() => openModal(item)}
                 index={index}
-                img={item.img}
+                img={item.img || "https://via.placeholder.com/150"}
                 title={item.title}
                 chapter={item.chapter}
-                score={item.score}
+                score={item.rating}
                 status={item.status}
               />
             </SwiperSlide>
@@ -103,14 +97,14 @@ const CardCollection: React.FC<CardCollectionProps> = ({
           style={{ padding: "0 1rem" }} // Add padding to the left and right of the Swiper container
         >
           {newTitlesData.map((item, index) => (
-            <SwiperSlide key={index}>
+            <SwiperSlide key={item.id || index}>
               <Card
                 onClick={() => openModal(item)}
                 index={index}
-                img={item.img}
+                img={item.img || "https://via.placeholder.com/150"}
                 title={item.title}
                 chapter={item.chapter}
-                score={item.score}
+                score={item.rating}
                 status={item.status}
               />
             </SwiperSlide>
@@ -121,10 +115,10 @@ const CardCollection: React.FC<CardCollectionProps> = ({
         <Modal
           isOpen={isModalOpen}
           onClose={() => setIsModalOpen(false)}
-          img={selectedCard.img}
+          img={selectedCard.img || "https://via.placeholder.com/150"}
           title={selectedCard.title}
           chapter={selectedCard.chapter}
-          score={selectedCard.score}
+          score={selectedCard.rating}
           status={selectedCard.status}
         />
       )}
