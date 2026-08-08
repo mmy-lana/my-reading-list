@@ -83,11 +83,19 @@
   z-index: 1;
 }
 
-.banner .content h1 {
+/* .banner .content h1 {
   font-family: "ICA Rubrik";
   font-size: 16em;
   line-height: 1em;
   color: #25283b;
+  position: relative;
+} */
+
+.banner .content h1 {
+  font-family: "ICA Rubrik";
+  font-size: 16em;
+  line-height: 1em;
+  color: currentColor;
   position: relative;
 }
 

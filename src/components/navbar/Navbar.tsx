@@ -30,7 +30,7 @@ const Navbar: React.FC = () => {
               className={`transition-colors ${
                 location.pathname === "/"
                   ? "text-primary border-b-2 border-primary"
-                  : "text-gray-600 dark:text-gray-300 hover:text-primary"
+                  : "text-gray-800 dark:text-slate-200 hover:text-primary dark:hover:text-primary"
               }`}
             >
               {t.home}
@@ -40,7 +40,7 @@ const Navbar: React.FC = () => {
               className={`transition-colors ${
                 location.pathname === "/all"
                   ? "text-primary border-b-2 border-primary"
-                  : "text-gray-600 dark:text-gray-300 hover:text-primary"
+                  : "text-gray-800 dark:text-slate-200 hover:text-primary dark:hover:text-primary"
               }`}
             >
               {(t as Record<string, string>).allList || "All Reading List"}
@@ -50,7 +50,7 @@ const Navbar: React.FC = () => {
               className={`transition-colors ${
                 location.pathname === "/admin"
                   ? "text-primary border-b-2 border-primary"
-                  : "text-gray-600 dark:text-gray-300 hover:text-primary"
+                  : "text-slate-700 dark:text-slate-200 hover:text-primary dark:hover:text-primary"
               }`}
             >
               Admin

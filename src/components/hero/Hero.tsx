@@ -6,6 +6,7 @@ import kazumaImg from "../../assets/images/kazuma.jpg";
 import tsunaImg from "../../assets/images/tsuna.jpg";
 import mikaImg from "../../assets/images/mika_p.jpg";
 import teresaImg from "../../assets/images/teresa.jpeg";
+import { useTheme } from "../../utils/ThemeProvider";
 
 const Hero: React.FC = () => {
   const { t } = useLanguage();
@@ -70,9 +71,13 @@ const Hero: React.FC = () => {
     }
   };
 
+  const { isDark } = useTheme();
+
   return (
     <div
-      className="banner touch-pan-y select-none"
+      className={`banner touch-pan-y select-none transition-colors duration-300 ${
+        isDark ? "bg-slate-950 text-white" : "bg-gray-100 text-gray-900"
+      }`}
       onPointerDown={handlePointerDown}
       onPointerMove={handlePointerMove}
       onPointerUp={handlePointerUp}
@@ -95,10 +100,14 @@ const Hero: React.FC = () => {
       </div>
       <div className="content pointer-events-none">
         <div className="author">
-          <h3 className="text-2xl sm:text-3xl text-left font-bold drop-shadow-md">
+          <h3 className={`text-2xl sm:text-3xl text-left font-bold drop-shadow-md ${
+            isDark ? "text-white" : "text-gray-900"
+          }`}>
             {t.heroTitle}
           </h3>
-          <p className="text-xs sm:text-sm text-left opacity-80 mt-1">
+          <p className={`text-xs sm:text-sm text-left mt-1 ${
+            isDark ? "text-gray-300" : "text-gray-600"
+          }`}>
             {t.heroSubtitle}
           </p>
         </div>

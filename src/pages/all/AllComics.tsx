@@ -5,11 +5,13 @@ import Footer from "../../components/footer/Footer";
 import { fetchAllComics } from "../../services/comicService";
 import { ComicItem } from "../../services/firebase";
 import { useLanguage } from "../../utils/i18n";
+import { useTheme } from "../../utils/ThemeProvider";
 
 const AllComics: React.FC = () => {
   const [comics, setComics] = useState<ComicItem[]>([]);
   const [loading, setLoading] = useState(true);
   const { t } = useLanguage();
+  const { isDark } = useTheme();
 
   useEffect(() => {
     async function loadData() {
@@ -26,7 +28,9 @@ const AllComics: React.FC = () => {
   }, []);
 
   return (
-    <div className="min-h-screen bg-background text-text-primary dark:bg-backgroundDark dark:text-textDark-primary transition-colors duration-300 flex flex-col justify-between">
+    <div className={`min-h-screen transition-colors duration-300 flex flex-col justify-between ${
+      isDark ? "bg-slate-950 text-gray-100" : "bg-gray-50 text-gray-900"
+    }`}>
       <div>
         <Navbar />
 
@@ -35,7 +39,7 @@ const AllComics: React.FC = () => {
             <h1 className="text-3xl font-extrabold text-primary mb-2">
               {(t as Record<string, string>).allList || "All Reading List"}
             </h1>
-            <p className="text-sm text-gray-500 dark:text-gray-400">
+            <p className={`text-sm ${isDark ? "text-gray-400" : "text-gray-600"}`}>
               Browse, search, and filter the complete collection of {comics.length} titles.
             </p>
           </div>

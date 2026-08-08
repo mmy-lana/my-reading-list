@@ -45,7 +45,7 @@ const StarRating: React.FC<StarRatingProps> = ({ score, maxStars = 5 }) => {
       )}
 
       {/* Display the fraction, e.g., 4.3/5 */}
-      <span className="text-sm text-gray-600">
+      <span className="text-xs text-slate-600 dark:text-slate-300 font-medium">
         {filledStars.toFixed(1)}/{maxStars}
       </span>
     </div>

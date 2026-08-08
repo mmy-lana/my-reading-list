@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { ComicItem } from "../../services/firebase";
 import StarRating from "../shared/StarRating";
+import { useTheme } from "../../utils/ThemeProvider";
 
 interface DingoLastReadCardProps {
   item: ComicItem;
@@ -19,6 +20,7 @@ export const DingoLastReadCard: React.FC<DingoLastReadCardProps> = ({
   index,
   onClick,
 }) => {
+  const { isDark } = useTheme();
   const fallbackSvg = getFallbackCoverSvg(item.title);
   const [imgSrc, setImgSrc] = useState(item.img && item.img.trim() !== "" ? item.img : fallbackSvg);
 
@@ -29,8 +31,12 @@ export const DingoLastReadCard: React.FC<DingoLastReadCardProps> = ({
     >
       <div className="absolute -inset-1 rounded-2xl bg-gradient-to-r from-pink-500 via-purple-500 to-indigo-500 opacity-30 blur-sm group-hover:opacity-100 group-hover:blur-md transition-all duration-500 animate-pulse" />
 
-      <div className="relative h-full w-full rounded-2xl bg-white/90 dark:bg-gray-900/90 backdrop-blur-md p-2.5 flex flex-col justify-between border border-white/20 dark:border-gray-800">
-        <div className="relative w-full aspect-[2/2.7] overflow-hidden rounded-xl bg-gray-100 dark:bg-gray-800">
+      <div className={`relative h-full w-full rounded-2xl backdrop-blur-md p-2.5 flex flex-col justify-between border ${
+        isDark ? "bg-slate-900/95 border-slate-800" : "bg-white/95 border-gray-200"
+      }`}>
+        <div className={`relative w-full aspect-[2/2.7] overflow-hidden rounded-xl ${
+          isDark ? "bg-slate-800" : "bg-gray-100"
+        }`}>
           <img
             src={imgSrc}
             alt={item.title}
@@ -49,15 +55,21 @@ export const DingoLastReadCard: React.FC<DingoLastReadCardProps> = ({
 
         <div className="mt-2.5 flex flex-col justify-between flex-1">
           <div>
-            <h3 className="font-bold text-xs text-gray-900 dark:text-white line-clamp-2 leading-tight group-hover:text-primary transition-colors">
+            <h3 className={`font-bold text-xs line-clamp-2 leading-tight group-hover:text-primary transition-colors ${
+              isDark ? "text-white" : "text-gray-900"
+            }`}>
               {item.title}
             </h3>
-            <p className="text-[10px] text-gray-500 dark:text-gray-400 mt-1 truncate">
+            <p className={`text-[10px] mt-1 truncate ${
+              isDark ? "text-gray-400" : "text-gray-600"
+            }`}>
               {item.myOpinion || "Recently Updated"}
             </p>
           </div>
 
-          <div className="pt-2 border-t border-gray-200 dark:border-gray-800 flex items-center justify-between">
+          <div className={`pt-2 border-t flex items-center justify-between ${
+            isDark ? "border-slate-800" : "border-gray-200"
+          }`}>
             <StarRating score={item.rating} />
           </div>
         </div>

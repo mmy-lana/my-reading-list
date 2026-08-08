@@ -18,17 +18,17 @@ const LanguageSwitcher: React.FC = () => {
   };
 
   return (
-    <div className="relative inline-flex items-center bg-gray-200 dark:bg-gray-700 p-1 rounded-full shadow-inner transition-colors duration-300">
+    <div className="relative inline-flex items-center bg-slate-200 dark:bg-slate-700/80 p-1 rounded-full shadow-inner transition-colors duration-300 border border-slate-300 dark:border-slate-600">
       {modes.map((m) => {
         const isActive = mode === m;
         return (
           <button
             key={m}
             onClick={() => setMode(m)}
-            className={`relative z-10 px-2.5 py-1 text-xs font-semibold rounded-full transition-all duration-300 ease-in-out focus:outline-none ${
+            className={`relative z-10 px-2.5 py-1 text-xs font-bold rounded-full transition-all duration-300 ease-in-out focus:outline-none ${
               isActive
-                ? "text-white shadow-md bg-primary dark:bg-primary"
-                : "text-gray-600 dark:text-gray-300 hover:text-black dark:hover:text-white"
+                ? "text-white shadow-md bg-primary ring-2 ring-primary/40"
+                : "text-slate-700 dark:text-slate-200 hover:text-slate-900 dark:hover:text-white"
             }`}
           >
             {getLabel(m)}

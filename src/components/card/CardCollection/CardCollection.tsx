@@ -102,11 +102,7 @@ const CardCollection: React.FC<CardCollectionProps> = ({
         <Modal
           isOpen={isModalOpen}
           onClose={() => setIsModalOpen(false)}
-          img={selectedCard.img || "https://via.placeholder.com/150"}
-          title={selectedCard.title}
-          chapter={selectedCard.chapter}
-          score={selectedCard.rating}
-          status={selectedCard.status}
+          comic={selectedCard}
         />
       )}
     </div>

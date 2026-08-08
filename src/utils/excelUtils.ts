@@ -1,16 +1,24 @@
 import * as XLSX from "xlsx";
 import { ComicItem } from "../services/firebase";
 
+import { capitalizeTitle } from "./textUtils";
+
 export function exportComicsToExcel(comics: ComicItem[], fileName = "M1yuki_Reading_List.xlsx") {
   const exportData = comics.map((c) => ({
     No: c.no || "",
-    Title: c.title,
+    Title: capitalizeTitle(c.title),
     Ch: c.chapter,
     Rating: c.rating,
     Genre: Array.isArray(c.genre) ? c.genre.join(", ") : c.genre || "",
-    "Status/My Personal Opinion": c.myOpinion ? `${c.status} - ${c.myOpinion}` : c.status,
     Status: c.status,
+    Author: c.author || "",
+    Studio: c.studio || "",
+    Type: c.type || "Manga",
+    ReleaseDate: c.releaseDate || "",
+    Synopsis: c.synopsis || "",
     "My Opinion": c.myOpinion || "",
+    CreatedAt: c.createdAt || new Date().toISOString(),
+    UpdatedAt: c.updatedAt || new Date().toISOString(),
   }));
 
   const worksheet = XLSX.utils.json_to_sheet(exportData);
@@ -28,7 +36,14 @@ export function downloadExcelTemplate() {
       Rating: 9.0,
       Genre: "Action, Adventure, Fantasy",
       Status: "Ongoing",
+      Author: "Author Name",
+      Studio: "Studio Name",
+      Type: "Manhwa",
+      ReleaseDate: "2024-01-01",
+      Synopsis: "Story summary goes here...",
       "My Opinion": "Highly recommended!",
+      CreatedAt: new Date().toISOString(),
+      UpdatedAt: new Date().toISOString(),
     },
   ];
 

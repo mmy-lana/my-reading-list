@@ -1,5 +1,6 @@
 import React, { forwardRef, useState } from "react";
 import StarRating from "../../shared/StarRating";
+import { capitalizeTitle, getStatusBadgeStyle } from "../../../utils/textUtils";
 
 interface CardProps {
   index?: number;
@@ -17,8 +18,11 @@ function getFallbackCoverSvg(title: string): string {
   return `data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="300" height="450" viewBox="0 0 300 450"><defs><linearGradient id="g" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="%231e1b4b"/><stop offset="50%" stop-color="%234338ca"/><stop offset="100%" stop-color="%23d946ef"/></linearGradient></defs><rect width="300" height="450" fill="url(%23g)"/><circle cx="150" cy="180" r="70" fill="%23ffffff" opacity="0.1"/><text x="150" y="230" font-family="sans-serif" font-size="18" font-weight="bold" fill="%23ffffff" text-anchor="middle">${encodedTitle}</text><text x="150" y="260" font-family="sans-serif" font-size="12" font-weight="bold" fill="%23f472b6" text-anchor="middle">M1YUKI READ</text></svg>`;
 }
 
+import { useTheme } from "../../../utils/ThemeProvider";
+
 const Card = forwardRef<HTMLDivElement, CardProps>(
   ({ img, title, chapter, score, status, onClick, index = 0 }, ref) => {
+    const { isDark } = useTheme();
     const fallbackSvg = getFallbackCoverSvg(title);
     const [imgSrc, setImgSrc] = useState(img && img.trim() !== "" ? img : fallbackSvg);
 
@@ -33,17 +37,22 @@ const Card = forwardRef<HTMLDivElement, CardProps>(
       <div
         ref={ref}
         onClick={onClick}
-        className="group relative w-full max-w-[210px] bg-white dark:bg-backgroundDark-secondary rounded-2xl shadow-md hover:shadow-xl transition-all duration-300 hover:-translate-y-1.5 cursor-pointer overflow-hidden border border-gray-200 dark:border-gray-700 flex flex-col justify-between"
+        className={`group relative w-full max-w-[210px] rounded-2xl shadow-md hover:shadow-xl transition-all duration-300 hover:-translate-y-1.5 cursor-pointer overflow-hidden border flex flex-col justify-between ${
+          isDark ? "bg-slate-900 border-slate-800" : "bg-white border-gray-200"
+        }`}
       >
-        <div className="relative w-full aspect-[2/3] overflow-hidden bg-gray-100 dark:bg-gray-800">
+        <div className={`relative w-full aspect-[2/3] overflow-hidden ${
+          isDark ? "bg-slate-950" : "bg-gray-100"
+        }`}>
           <img
             src={imgSrc}
             alt={title}
             onError={() => setImgSrc(fallbackSvg)}
+            loading="lazy"
             className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
           />
 
-          <span className="absolute top-2.5 left-2.5 px-2.5 py-1 text-[10px] uppercase font-bold tracking-wider rounded-full bg-black/60 text-white backdrop-blur-md shadow">
+          <span className={`absolute top-2.5 left-2.5 px-2 py-0.5 text-[10px] uppercase font-bold tracking-wider rounded-full shadow ${getStatusBadgeStyle(status)}`}>
             {status}
           </span>
 
@@ -54,17 +63,25 @@ const Card = forwardRef<HTMLDivElement, CardProps>(
           )}
         </div>
 
-        <div className="p-3.5 flex flex-col justify-between flex-1">
+        <div className={`p-3.5 flex flex-col justify-between flex-1 ${
+          isDark ? "bg-slate-900" : "bg-white"
+        }`}>
           <div>
-            <h3 className="font-bold text-sm text-gray-900 dark:text-gray-100 line-clamp-2 leading-tight mb-1 group-hover:text-primary transition-colors">
-              {title}
+            <h3 className={`font-bold text-sm line-clamp-2 leading-tight mb-1 group-hover:text-primary transition-colors ${
+              isDark ? "text-white" : "text-gray-900"
+            }`}>
+              {capitalizeTitle(title)}
             </h3>
-            <p className="text-xs text-gray-500 dark:text-gray-400 mb-2 font-medium">
+            <p className={`text-xs mb-2 font-medium ${
+              isDark ? "text-gray-400" : "text-gray-600"
+            }`}>
               Chapter {chapter}
             </p>
           </div>
 
-          <div className="pt-2 border-t border-gray-100 dark:border-gray-700/60 flex items-center justify-between">
+          <div className={`pt-2 border-t flex items-center justify-between ${
+            isDark ? "border-slate-800" : "border-gray-100"
+          }`}>
             <StarRating score={score} />
           </div>
         </div>

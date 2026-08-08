@@ -7,10 +7,12 @@ import { fetchAllComics } from "../../services/comicService";
 import { ComicItem } from "../../services/firebase";
 import { Link } from "react-router-dom";
 import { useLanguage } from "../../utils/i18n";
+import { useTheme } from "../../utils/ThemeProvider";
 
 const Home: React.FC = () => {
   const [comics, setComics] = useState<ComicItem[]>([]);
   const { t } = useLanguage();
+  const { isDark } = useTheme();
 
   useEffect(() => {
     async function loadData() {
@@ -37,14 +39,18 @@ const Home: React.FC = () => {
     .slice(0, 10);
 
   return (
-    <div className="relative min-h-screen bg-background text-text-primary dark:bg-backgroundDark dark:text-textDark-primary transition-colors duration-300 overflow-x-hidden">
+    <div className={`relative min-h-screen transition-colors duration-300 overflow-x-hidden ${
+      isDark ? "bg-slate-950 text-gray-100" : "bg-gray-50 text-gray-900"
+    }`}>
       <Navbar />
 
       <div className="relative z-10">
         <Hero />
       </div>
 
-      <div className="relative z-20 bg-background dark:bg-backgroundDark transition-colors duration-300 pb-16">
+      <div className={`relative z-20 transition-colors duration-300 pb-16 ${
+        isDark ? "bg-slate-950" : "bg-gray-50"
+      }`}>
         <CardCollection
           topTenData={topTenData}
           lastReadData={lastReadData}
@@ -53,11 +59,15 @@ const Home: React.FC = () => {
 
         {/* Call-to-action banner to explore full list */}
         <div className="max-w-7xl mx-auto px-4 mt-12 text-center">
-          <div className="p-8 bg-gradient-to-r from-primary/10 via-purple-500/10 to-primary/10 dark:from-primary/20 dark:to-primary/20 rounded-2xl border border-primary/20 shadow-lg flex flex-col items-center justify-center gap-4">
-            <h3 className="text-2xl font-bold text-gray-900 dark:text-white">
+          <div className={`p-8 rounded-2xl border shadow-lg flex flex-col items-center justify-center gap-4 ${
+            isDark
+              ? "bg-gradient-to-r from-primary/20 via-purple-500/20 to-primary/20 border-primary/30"
+              : "bg-gradient-to-r from-primary/10 via-purple-500/10 to-primary/10 border-primary/20"
+          }`}>
+            <h3 className={`text-2xl font-bold ${isDark ? "text-white" : "text-gray-900"}`}>
               Want to see the full list of {comics.length} titles?
             </h3>
-            <p className="text-sm text-gray-600 dark:text-gray-300 max-w-lg">
+            <p className={`text-sm max-w-lg ${isDark ? "text-gray-300" : "text-gray-700"}`}>
               Search, filter by genre or status, switch between grid/table views, or export to Excel.
             </p>
             <Link

@@ -11,7 +11,15 @@ export interface ComicItem {
   genre: string[];
   status: string;
   myOpinion: string;
+  synopsis?: string;
   img: string;
+  imgFallback1?: string;
+  imgFallback2?: string;
+  imgFallback3?: string;
+  author?: string;
+  studio?: string;
+  type?: string;
+  releaseDate?: string;
   createdAt: string;
   updatedAt: string;
   isTopTen?: boolean;

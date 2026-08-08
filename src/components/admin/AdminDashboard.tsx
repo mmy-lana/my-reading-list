@@ -7,9 +7,12 @@ import { exportComicsToExcel, downloadExcelTemplate, parseExcelFile } from "../.
 import AdminTable from "../../components/admin/AdminTable";
 import Navbar from "../../components/navbar/Navbar";
 import Footer from "../../components/footer/Footer";
+import ComicFormModal from "./ComicFormModal";
+import { useTheme } from "../../utils/ThemeProvider";
 
 const AdminDashboard: React.FC = () => {
   const navigate = useNavigate();
+  const { isDark } = useTheme();
   const [comics, setComics] = useState<ComicItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -87,9 +90,17 @@ const AdminDashboard: React.FC = () => {
         genre: editingComic.genre || [],
         status: editingComic.status || "Ongoing",
         myOpinion: editingComic.myOpinion || "",
+        synopsis: editingComic.synopsis || "",
         img: editingComic.img || "",
-        createdAt: new Date().toISOString(),
-        updatedAt: new Date().toISOString(),
+        imgFallback1: editingComic.imgFallback1 || "",
+        imgFallback2: editingComic.imgFallback2 || "",
+        imgFallback3: editingComic.imgFallback3 || "",
+        author: editingComic.author || "",
+        studio: editingComic.studio || "",
+        type: editingComic.type || "Manga",
+        releaseDate: editingComic.releaseDate || "",
+        createdAt: editingComic.createdAt || new Date().toISOString(),
+        updatedAt: editingComic.updatedAt || new Date().toISOString(),
       });
     }
 
@@ -118,7 +129,9 @@ const AdminDashboard: React.FC = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-background dark:bg-backgroundDark text-text-primary dark:text-textDark-primary">
+      <div className={`min-h-screen flex items-center justify-center ${
+        isDark ? "bg-slate-950 text-gray-100" : "bg-gray-50 text-gray-900"
+      }`}>
         <p className="text-lg font-semibold animate-pulse">Loading Admin Portal...</p>
       </div>
     );
@@ -126,11 +139,15 @@ const AdminDashboard: React.FC = () => {
 
   if (!isAuthenticated) {
     return (
-      <div className="min-h-screen flex flex-col justify-between bg-background dark:bg-backgroundDark">
+      <div className={`min-h-screen flex flex-col justify-between ${
+        isDark ? "bg-slate-950 text-gray-100" : "bg-gray-50 text-gray-900"
+      }`}>
         <Navbar />
-        <div className="max-w-md mx-auto p-6 bg-white dark:bg-backgroundDark-secondary shadow-xl rounded-xl border border-gray-200 dark:border-gray-700 my-12">
+        <div className={`max-w-md mx-auto p-6 shadow-xl rounded-xl border my-12 ${
+          isDark ? "bg-slate-900 text-gray-100 border-slate-800" : "bg-white text-gray-900 border-gray-200"
+        }`}>
           <h2 className="text-2xl font-bold mb-2 text-center text-primary">Admin Access Verification</h2>
-          <p className="text-xs text-gray-500 dark:text-gray-400 mb-6 text-center">
+          <p className={`text-xs mb-6 text-center ${isDark ? "text-gray-400" : "text-gray-600"}`}>
             2FA Device Trust is required. Please sign in with your email magic link to authorize this device.
           </p>
 
@@ -141,18 +158,20 @@ const AdminDashboard: React.FC = () => {
               value={emailInput}
               onChange={(e) => setEmailInput(e.target.value)}
               required
-              className="w-full p-2.5 rounded border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-800 text-sm focus:outline-none focus:ring-2 focus:ring-primary"
+              className={`w-full p-2.5 rounded-lg border text-sm focus:outline-none focus:ring-2 focus:ring-primary ${
+                isDark ? "border-slate-700 bg-slate-800 text-gray-100" : "border-gray-300 bg-gray-50 text-gray-900"
+              }`}
             />
             <button
               type="submit"
-              className="w-full py-2.5 bg-primary hover:bg-primary-hover text-white font-semibold rounded shadow transition-colors"
+              className="w-full py-2.5 bg-primary hover:bg-primary-hover text-white font-bold rounded-lg shadow transition-colors"
             >
               Send Magic Link (2FA)
             </button>
           </form>
 
           {authStatus && (
-            <div className="mt-4 p-3 bg-blue-50 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 text-xs rounded border border-blue-200 dark:border-blue-800">
+            <div className="mt-4 p-3 bg-blue-50 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 text-xs rounded-lg border border-blue-200 dark:border-blue-800">
               {authStatus}
             </div>
           )}
@@ -163,14 +182,16 @@ const AdminDashboard: React.FC = () => {
   }
 
   return (
-    <div className="min-h-screen bg-background dark:bg-backgroundDark text-text-primary dark:text-textDark-primary">
+    <div className={`min-h-screen transition-colors duration-300 ${
+      isDark ? "bg-slate-950 text-gray-100" : "bg-gray-50 text-gray-900"
+    }`}>
       <Navbar />
 
       <main className="max-w-7xl mx-auto px-4 py-8">
         <div className="flex flex-col md:flex-row items-center justify-between gap-4 mb-8">
           <div>
-            <h1 className="text-3xl font-bold text-primary">Admin Reading List Manager</h1>
-            <p className="text-sm text-gray-500 dark:text-gray-400">
+            <h1 className="text-3xl font-extrabold text-primary">Admin Reading List Manager</h1>
+            <p className="text-sm text-slate-600 dark:text-slate-400">
               Manage records, run bulk operations, or import/export Excel files.
             </p>
           </div>
@@ -239,109 +260,13 @@ const AdminDashboard: React.FC = () => {
         />
       </main>
 
-      {isModalOpen && (
-        <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-50 p-4">
-          <div className="bg-white dark:bg-backgroundDark-secondary p-6 rounded-xl shadow-2xl max-w-lg w-full border border-gray-200 dark:border-gray-700">
-            <h2 className="text-xl font-bold mb-4">{editingComic?.id ? "Edit Comic" : "Add New Comic"}</h2>
-
-            <form onSubmit={handleSaveComic} className="space-y-4 text-sm">
-              <div>
-                <label className="block mb-1 font-medium">Title</label>
-                <input
-                  type="text"
-                  required
-                  value={editingComic?.title || ""}
-                  onChange={(e) => setEditingComic((prev) => ({ ...prev, title: e.target.value }))}
-                  className="w-full p-2 border rounded dark:bg-gray-800 dark:border-gray-600"
-                />
-              </div>
-
-              <div className="grid grid-cols-2 gap-4">
-                <div>
-                  <label className="block mb-1 font-medium">Chapter</label>
-                  <input
-                    type="number"
-                    value={editingComic?.chapter || 0}
-                    onChange={(e) => setEditingComic((prev) => ({ ...prev, chapter: Number(e.target.value) }))}
-                    className="w-full p-2 border rounded dark:bg-gray-800 dark:border-gray-600"
-                  />
-                </div>
-
-                <div>
-                  <label className="block mb-1 font-medium">Rating (0 - 10)</label>
-                  <input
-                    type="number"
-                    step="0.1"
-                    min="0"
-                    max="10"
-                    value={editingComic?.rating || 0}
-                    onChange={(e) => setEditingComic((prev) => ({ ...prev, rating: Number(e.target.value) }))}
-                    className="w-full p-2 border rounded dark:bg-gray-800 dark:border-gray-600"
-                  />
-                </div>
-              </div>
-
-              <div>
-                <label className="block mb-1 font-medium">Genre (comma separated)</label>
-                <input
-                  type="text"
-                  value={Array.isArray(editingComic?.genre) ? editingComic.genre.join(", ") : ""}
-                  onChange={(e) =>
-                    setEditingComic((prev) => ({
-                      ...prev,
-                      genre: e.target.value.split(",").map((s) => s.trim()),
-                    }))
-                  }
-                  className="w-full p-2 border rounded dark:bg-gray-800 dark:border-gray-600"
-                />
-              </div>
-
-              <div>
-                <label className="block mb-1 font-medium">Status</label>
-                <input
-                  type="text"
-                  value={editingComic?.status || "Ongoing"}
-                  onChange={(e) => setEditingComic((prev) => ({ ...prev, status: e.target.value }))}
-                  className="w-full p-2 border rounded dark:bg-gray-800 dark:border-gray-600"
-                />
-              </div>
-
-              <div>
-                <label className="block mb-1 font-medium">Cover Image URL</label>
-                <input
-                  type="url"
-                  value={editingComic?.img || ""}
-                  onChange={(e) => setEditingComic((prev) => ({ ...prev, img: e.target.value }))}
-                  className="w-full p-2 border rounded dark:bg-gray-800 dark:border-gray-600"
-                />
-              </div>
-
-              <div>
-                <label className="block mb-1 font-medium">My Personal Opinion</label>
-                <textarea
-                  rows={3}
-                  value={editingComic?.myOpinion || ""}
-                  onChange={(e) => setEditingComic((prev) => ({ ...prev, myOpinion: e.target.value }))}
-                  className="w-full p-2 border rounded dark:bg-gray-800 dark:border-gray-600"
-                />
-              </div>
-
-              <div className="flex justify-end gap-3 pt-2">
-                <button
-                  type="button"
-                  onClick={() => setIsModalOpen(false)}
-                  className="px-4 py-2 bg-gray-300 dark:bg-gray-700 rounded font-semibold"
-                >
-                  Cancel
-                </button>
-                <button type="submit" className="px-4 py-2 bg-primary text-white rounded font-semibold shadow">
-                  Save
-                </button>
-              </div>
-            </form>
-          </div>
-        </div>
-      )}
+      <ComicFormModal
+        isOpen={isModalOpen}
+        editingComic={editingComic}
+        setEditingComic={setEditingComic}
+        onClose={() => setIsModalOpen(false)}
+        onSubmit={handleSaveComic}
+      />
 
       <Footer />
     </div>

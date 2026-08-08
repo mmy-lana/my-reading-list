@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { ComicItem } from "../../services/firebase";
 import StarRating from "../shared/StarRating";
+import { useTheme } from "../../utils/ThemeProvider";
 
 interface InfiniteMovingNewTitlesProps {
   items: ComicItem[];
@@ -15,15 +16,20 @@ function getFallbackCoverSvg(title: string): string {
 }
 
 const MarqueeCard: React.FC<{ item: ComicItem; onClick: () => void }> = ({ item, onClick }) => {
+  const { isDark } = useTheme();
   const fallbackSvg = getFallbackCoverSvg(item.title);
   const [imgSrc, setImgSrc] = useState(item.img && item.img.trim() !== "" ? item.img : fallbackSvg);
 
   return (
     <div
       onClick={onClick}
-      className="group relative w-[180px] shrink-0 rounded-2xl bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 p-2.5 shadow-md hover:shadow-xl transition-all duration-300 hover:-translate-y-1 cursor-pointer overflow-hidden"
+      className={`group relative w-[180px] shrink-0 rounded-2xl border p-2.5 shadow-md hover:shadow-xl transition-all duration-300 hover:-translate-y-1 cursor-pointer overflow-hidden ${
+        isDark ? "bg-slate-900 border-slate-800" : "bg-white border-gray-200"
+      }`}
     >
-      <div className="relative w-full aspect-[2/2.7] overflow-hidden rounded-xl bg-gray-100 dark:bg-gray-800">
+      <div className={`relative w-full aspect-[2/2.7] overflow-hidden rounded-xl ${
+        isDark ? "bg-slate-800" : "bg-gray-100"
+      }`}>
         <img
           src={imgSrc}
           alt={item.title}
@@ -37,14 +43,18 @@ const MarqueeCard: React.FC<{ item: ComicItem; onClick: () => void }> = ({ item,
       </div>
 
       <div className="mt-2.5 flex flex-col justify-between">
-        <h4 className="font-bold text-xs text-gray-900 dark:text-white line-clamp-1 group-hover:text-primary transition-colors">
+        <h4 className={`font-bold text-xs line-clamp-1 group-hover:text-primary transition-colors ${
+          isDark ? "text-white" : "text-gray-900"
+        }`}>
           {item.title}
         </h4>
-        <p className="text-[10px] text-gray-500 dark:text-gray-400 mt-0.5">
+        <p className={`text-[10px] mt-0.5 ${isDark ? "text-gray-400" : "text-gray-600"}`}>
           Chapter {item.chapter}
         </p>
 
-        <div className="mt-2 pt-1.5 border-t border-gray-100 dark:border-gray-800 flex items-center justify-between">
+        <div className={`mt-2 pt-1.5 border-t flex items-center justify-between ${
+          isDark ? "border-slate-800" : "border-gray-100"
+        }`}>
           <StarRating score={item.rating} />
         </div>
       </div>
