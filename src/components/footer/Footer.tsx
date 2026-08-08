@@ -17,10 +17,6 @@ const Footer: React.FC = () => {
             |{" "}
             <Link to="/all" className="hover:underline text-primary">
               {(t as Record<string, string>).allList || "All Reading List"}
-            </Link>{" "}
-            |{" "}
-            <Link to="/admin" className="hover:underline text-primary">
-              Admin Portal
             </Link>
           </p>
           <p className="text-xs text-gray-500 dark:text-gray-400 mb-2">

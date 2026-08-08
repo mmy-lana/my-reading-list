@@ -45,16 +45,6 @@ const Navbar: React.FC = () => {
             >
               {(t as Record<string, string>).allList || "All Reading List"}
             </Link>
-            <Link
-              to="/admin"
-              className={`transition-colors ${
-                location.pathname === "/admin"
-                  ? "text-primary border-b-2 border-primary"
-                  : "text-slate-700 dark:text-slate-200 hover:text-primary dark:hover:text-primary"
-              }`}
-            >
-              Admin
-            </Link>
           </nav>
         </div>
 

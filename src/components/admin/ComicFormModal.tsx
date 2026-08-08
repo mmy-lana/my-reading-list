@@ -57,6 +57,10 @@ const ComicFormModal: React.FC<ComicFormModalProps> = ({
 
   if (!isOpen) return null;
 
+  const inputStyle = `w-full p-2 rounded-lg border text-sm focus:outline-none focus:ring-2 focus:ring-primary ${
+    isDark ? "border-slate-700 bg-slate-800 text-gray-100" : "border-gray-300 bg-gray-50 text-gray-900"
+  }`;
+
   return (
     <div
       className="fixed inset-0 bg-slate-950/80 backdrop-blur-md flex items-center justify-center z-50 p-4 transition-opacity duration-300"
@@ -91,9 +95,7 @@ const ComicFormModal: React.FC<ComicFormModalProps> = ({
               required
               value={editingComic?.title || ""}
               onChange={(e) => setEditingComic((prev) => ({ ...prev, title: e.target.value }))}
-              className={`w-full p-2 rounded-lg border text-sm focus:outline-none focus:ring-2 focus:ring-primary ${
-                isDark ? "border-slate-700 bg-slate-800 text-gray-100" : "border-gray-300 bg-gray-50 text-gray-900"
-              }`}
+              className={inputStyle}
             />
           </div>
 
@@ -105,7 +107,7 @@ const ComicFormModal: React.FC<ComicFormModalProps> = ({
                 required
                 value={editingComic?.chapter || 0}
                 onChange={(e) => setEditingComic((prev) => ({ ...prev, chapter: Number(e.target.value) }))}
-                className="w-full p-2 rounded-lg border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-primary"
+                className={inputStyle}
               />
             </div>
 
@@ -118,7 +120,7 @@ const ComicFormModal: React.FC<ComicFormModalProps> = ({
                 max="10"
                 value={editingComic?.rating || 0}
                 onChange={(e) => setEditingComic((prev) => ({ ...prev, rating: Number(e.target.value) }))}
-                className="w-full p-2 rounded-lg border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-primary"
+                className={inputStyle}
               />
             </div>
           </div>
@@ -131,7 +133,7 @@ const ComicFormModal: React.FC<ComicFormModalProps> = ({
                 placeholder="Author"
                 value={editingComic?.author || ""}
                 onChange={(e) => setEditingComic((prev) => ({ ...prev, author: e.target.value }))}
-                className="w-full p-2 rounded-lg border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-primary"
+                className={inputStyle}
               />
             </div>
 
@@ -142,7 +144,7 @@ const ComicFormModal: React.FC<ComicFormModalProps> = ({
                 placeholder="Studio / Publisher"
                 value={editingComic?.studio || ""}
                 onChange={(e) => setEditingComic((prev) => ({ ...prev, studio: e.target.value }))}
-                className="w-full p-2 rounded-lg border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-primary"
+                className={inputStyle}
               />
             </div>
 
@@ -151,7 +153,7 @@ const ComicFormModal: React.FC<ComicFormModalProps> = ({
               <select
                 value={editingComic?.type || "Manga"}
                 onChange={(e) => setEditingComic((prev) => ({ ...prev, type: e.target.value }))}
-                className="w-full p-2 rounded-lg border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-primary"
+                className={inputStyle}
               >
                 <option value="Manga">Manga</option>
                 <option value="Manhwa">Manhwa</option>
@@ -169,7 +171,7 @@ const ComicFormModal: React.FC<ComicFormModalProps> = ({
                 placeholder="Ongoing / END / S1 END"
                 value={editingComic?.status || "Ongoing"}
                 onChange={(e) => setEditingComic((prev) => ({ ...prev, status: e.target.value }))}
-                className="w-full p-2 rounded-lg border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-primary"
+                className={inputStyle}
               />
             </div>
 
@@ -179,7 +181,7 @@ const ComicFormModal: React.FC<ComicFormModalProps> = ({
                 type="date"
                 value={editingComic?.releaseDate || ""}
                 onChange={(e) => setEditingComic((prev) => ({ ...prev, releaseDate: e.target.value }))}
-                className="w-full p-2 rounded-lg border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-primary"
+                className={inputStyle}
               />
             </div>
           </div>
@@ -192,7 +194,7 @@ const ComicFormModal: React.FC<ComicFormModalProps> = ({
                 placeholder="ISO Date"
                 value={editingComic?.createdAt || ""}
                 onChange={(e) => setEditingComic((prev) => ({ ...prev, createdAt: e.target.value }))}
-                className="w-full p-2 rounded-lg border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-primary"
+                className={inputStyle}
               />
             </div>
 
@@ -203,7 +205,7 @@ const ComicFormModal: React.FC<ComicFormModalProps> = ({
                 placeholder="ISO Date"
                 value={editingComic?.updatedAt || ""}
                 onChange={(e) => setEditingComic((prev) => ({ ...prev, updatedAt: e.target.value }))}
-                className="w-full p-2 rounded-lg border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-primary"
+                className={inputStyle}
               />
             </div>
           </div>
@@ -215,7 +217,7 @@ const ComicFormModal: React.FC<ComicFormModalProps> = ({
               placeholder="https://..."
               value={editingComic?.img || ""}
               onChange={(e) => setEditingComic((prev) => ({ ...prev, img: e.target.value }))}
-              className="w-full p-2 rounded-lg border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-primary"
+              className={inputStyle}
             />
           </div>
 
@@ -256,7 +258,7 @@ const ComicFormModal: React.FC<ComicFormModalProps> = ({
                   genre: e.target.value.split(",").map((s) => s.trim()),
                 }))
               }
-              className="w-full p-2 rounded-lg border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-primary"
+              className={inputStyle}
             />
           </div>
 
@@ -267,7 +269,7 @@ const ComicFormModal: React.FC<ComicFormModalProps> = ({
               placeholder="Official storyline summary..."
               value={editingComic?.synopsis || ""}
               onChange={(e) => setEditingComic((prev) => ({ ...prev, synopsis: e.target.value }))}
-              className="w-full p-2 rounded-lg border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-primary"
+              className={inputStyle}
             />
           </div>
 
@@ -278,7 +280,7 @@ const ComicFormModal: React.FC<ComicFormModalProps> = ({
               placeholder="Personal opinion..."
               value={editingComic?.myOpinion || ""}
               onChange={(e) => setEditingComic((prev) => ({ ...prev, myOpinion: e.target.value }))}
-              className="w-full p-2 rounded-lg border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-primary"
+              className={inputStyle}
             />
           </div>
 

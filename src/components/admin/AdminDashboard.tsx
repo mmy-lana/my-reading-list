@@ -23,41 +23,41 @@ const AdminDashboard: React.FC = () => {
   const [editingComic, setEditingComic] = useState<Partial<ComicItem> | null>(null);
 
   useEffect(() => {
-    checkAuthAndTrust();
+    const unsubscribe = auth.onAuthStateChanged(async (currentUser) => {
+      try {
+        setLoading(true);
+
+        if (window.location.href.includes("apiKey=")) {
+          const user = await verifyAdminMagicLink();
+          if (user) {
+            await registerTrustedDevice(user.uid);
+            setIsAuthenticated(true);
+            await loadComics();
+            return;
+          }
+        }
+
+        if (currentUser) {
+          const isTrusted = await verifyDeviceTrust(currentUser.uid);
+          if (isTrusted) {
+            setIsAuthenticated(true);
+            await loadComics();
+            return;
+          }
+        }
+
+        setIsAuthenticated(false);
+      } catch (err: unknown) {
+        console.error(err);
+        setAuthStatus((err as Error).message);
+        setIsAuthenticated(false);
+      } finally {
+        setLoading(false);
+      }
+    });
+
+    return () => unsubscribe();
   }, []);
-
-  async function checkAuthAndTrust() {
-    try {
-      setLoading(true);
-
-      if (window.location.href.includes("apiKey=")) {
-        const user = await verifyAdminMagicLink();
-        if (user) {
-          await registerTrustedDevice(user.uid);
-          setIsAuthenticated(true);
-          await loadComics();
-          return;
-        }
-      }
-
-      const currentUser = auth.currentUser;
-      if (currentUser) {
-        const isTrusted = await verifyDeviceTrust(currentUser.uid);
-        if (isTrusted) {
-          setIsAuthenticated(true);
-          await loadComics();
-          return;
-        }
-      }
-
-      setIsAuthenticated(false);
-    } catch (err: unknown) {
-      console.error(err);
-      setAuthStatus((err as Error).message);
-    } finally {
-      setLoading(false);
-    }
-  }
 
   async function loadComics() {
     const data = await fetchAllComics();

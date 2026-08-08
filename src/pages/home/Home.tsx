@@ -11,6 +11,7 @@ import { useTheme } from "../../utils/ThemeProvider";
 
 const Home: React.FC = () => {
   const [comics, setComics] = useState<ComicItem[]>([]);
+  const [loading, setLoading] = useState(true);
   const { t } = useLanguage();
   const { isDark } = useTheme();
 
@@ -21,6 +22,8 @@ const Home: React.FC = () => {
         setComics(data);
       } catch (err) {
         console.error("Failed to load comics:", err);
+      } finally {
+        setLoading(false);
       }
     }
     loadData();
@@ -51,33 +54,42 @@ const Home: React.FC = () => {
       <div className={`relative z-20 transition-colors duration-300 pb-16 ${
         isDark ? "bg-slate-950" : "bg-gray-50"
       }`}>
-        <CardCollection
-          topTenData={topTenData}
-          lastReadData={lastReadData}
-          newTitlesData={newTitlesData}
-        />
-
-        {/* Call-to-action banner to explore full list */}
-        <div className="max-w-7xl mx-auto px-4 mt-12 text-center">
-          <div className={`p-8 rounded-2xl border shadow-lg flex flex-col items-center justify-center gap-4 ${
-            isDark
-              ? "bg-gradient-to-r from-primary/20 via-purple-500/20 to-primary/20 border-primary/30"
-              : "bg-gradient-to-r from-primary/10 via-purple-500/10 to-primary/10 border-primary/20"
-          }`}>
-            <h3 className={`text-2xl font-bold ${isDark ? "text-white" : "text-gray-900"}`}>
-              Want to see the full list of {comics.length} titles?
-            </h3>
-            <p className={`text-sm max-w-lg ${isDark ? "text-gray-300" : "text-gray-700"}`}>
-              Search, filter by genre or status, switch between grid/table views, or export to Excel.
-            </p>
-            <Link
-              to="/all"
-              className="px-6 py-3 bg-primary hover:bg-primary-hover text-white font-bold rounded-xl shadow-lg transition-transform hover:scale-105"
-            >
-              {(t as Record<string, string>).exploreMore || "Explore All 300+ Titles"} →
-            </Link>
+        {loading ? (
+          <div className="flex flex-col items-center justify-center py-20 gap-3">
+            <div className="w-10 h-10 border-4 border-primary border-t-transparent rounded-full animate-spin" />
+            <p className="text-sm font-semibold text-slate-500 animate-pulse">Loading reading list...</p>
           </div>
-        </div>
+        ) : (
+          <>
+            <CardCollection
+              topTenData={topTenData}
+              lastReadData={lastReadData}
+              newTitlesData={newTitlesData}
+            />
+
+            {/* Call-to-action banner to explore full list */}
+            <div className="max-w-7xl mx-auto px-4 mt-12 text-center">
+              <div className={`p-8 rounded-2xl border shadow-lg flex flex-col items-center justify-center gap-4 ${
+                isDark
+                  ? "bg-gradient-to-r from-primary/20 via-purple-500/20 to-primary/20 border-primary/30"
+                  : "bg-gradient-to-r from-primary/10 via-purple-500/10 to-primary/10 border-primary/20"
+              }`}>
+                <h3 className={`text-2xl font-bold ${isDark ? "text-white" : "text-gray-900"}`}>
+                  Want to see the full list of {comics.length} titles?
+                </h3>
+                <p className={`text-sm max-w-lg ${isDark ? "text-gray-300" : "text-gray-700"}`}>
+                  Search, filter by genre or status, switch between grid/table views, or export to Excel.
+                </p>
+                <Link
+                  to="/all"
+                  className="px-6 py-3 bg-primary hover:bg-primary-hover text-white font-bold rounded-xl shadow-lg transition-transform hover:scale-105"
+                >
+                  {(t as Record<string, string>).exploreMore || "Explore All 300+ Titles"} →
+                </Link>
+              </div>
+            </div>
+          </>
+        )}
       </div>
 
       <Footer />

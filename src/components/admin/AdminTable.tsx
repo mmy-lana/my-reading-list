@@ -145,7 +145,11 @@ const AdminTable: React.FC<AdminTableProps> = ({
               <th onClick={() => handleSort("releaseDate")} className="p-3 cursor-pointer hover:text-primary font-bold">
                 Release Date {sortField === "releaseDate" && (sortAsc ? "▲" : "▼")}
               </th>
+              <th className="p-3 font-bold">Genre</th>
+              <th className="p-3 font-bold">Synopsis</th>
               <th className="p-3 font-bold">Description / Opinion</th>
+              <th className="p-3 font-bold">Created At</th>
+              <th className="p-3 font-bold">Updated At</th>
               {/* Sticky Frozen Actions Column Header */}
               <th className={`p-3 font-bold sticky right-0 shadow-l z-30 ${
                 isDark ? "bg-slate-800 text-gray-200" : "bg-gray-100 text-gray-800"
@@ -185,9 +189,27 @@ const AdminTable: React.FC<AdminTableProps> = ({
               <td className={`p-3 ${isDark ? "text-gray-300" : "text-gray-700"}`}>{item.studio || <span className="italic text-gray-400">[No data]</span>}</td>
               <td className={`p-3 ${isDark ? "text-gray-300" : "text-gray-700"}`}>{item.type || "Manga"}</td>
               <td className={`p-3 ${isDark ? "text-gray-300" : "text-gray-700"}`}>{item.releaseDate || <span className="italic text-gray-400">[No data]</span>}</td>
+              <td className="p-3">
+                {Array.isArray(item.genre) && item.genre.length > 0 ? (
+                  <div className="flex flex-wrap gap-1 max-w-[150px]">
+                    {item.genre.map((g) => (
+                      <span key={g} className="px-1.5 py-0.5 text-[10px] bg-slate-800 text-slate-200 rounded">
+                        {g}
+                      </span>
+                    ))}
+                  </div>
+                ) : (
+                  <span className="italic text-gray-400">[No data]</span>
+                )}
+              </td>
+              <td className={`p-3 max-w-xs truncate ${isDark ? "text-gray-400" : "text-gray-700"}`}>
+                {item.synopsis || <span className="italic text-gray-400">[No data]</span>}
+              </td>
               <td className={`p-3 max-w-xs truncate ${isDark ? "text-gray-400" : "text-gray-700"}`}>
                 {item.myOpinion || <span className="italic text-gray-400">[No data]</span>}
               </td>
+              <td className={`p-3 text-[10px] ${isDark ? "text-gray-400" : "text-gray-500"}`}>{item.createdAt || <span className="italic text-gray-400">[No data]</span>}</td>
+              <td className={`p-3 text-[10px] ${isDark ? "text-gray-400" : "text-gray-500"}`}>{item.updatedAt || <span className="italic text-gray-400">[No data]</span>}</td>
                 {/* Sticky Frozen Actions Cell */}
                 <td className={`p-3 sticky right-0 border-l shadow-l z-20 ${
                   isDark ? "bg-slate-900 border-slate-800" : "bg-white border-gray-200"

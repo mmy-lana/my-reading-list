@@ -1,20 +1,28 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Navigate, Outlet } from "react-router-dom";
+import { onAuthStateChanged } from "firebase/auth";
+import { auth } from "../../services/firebase";
+import { verifyDeviceTrust } from "../../services/authService";
 
-interface PrivateRouteProps {
-  // This can hold any props you need, but it's simplified here for now
-}
+const PrivateRoute: React.FC = () => {
+  const [checking, setChecking] = useState(true);
+  const [authenticated, setAuthenticated] = useState(false);
 
-const PrivateRoute: React.FC<PrivateRouteProps> = () => {
-  const isAuthenticated = localStorage.getItem("token"); // Or use a global state to check auth
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, async (user) => {
+      if (user) {
+        const isTrusted = await verifyDeviceTrust(user.uid);
+        setAuthenticated(isTrusted);
+      } else {
+        setAuthenticated(false);
+      }
+      setChecking(false);
+    });
+    return () => unsubscribe();
+  }, []);
 
-  // If not authenticated, redirect to login page
-  if (!isAuthenticated) {
-    return <Navigate to="/login" />;
-  }
-
-  // Otherwise, render the child routes
-  return <Outlet />;
+  if (checking) return null;
+  return authenticated ? <Outlet /> : <Navigate to="/admin" replace />;
 };
 
 export default PrivateRoute;
