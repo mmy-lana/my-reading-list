@@ -215,10 +215,23 @@ code {
   background: #444;
 }
 
+@keyframes marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+.animate-marquee {
+  animation: marquee linear infinite;
+}
+
 /* Firefox scrollbar optimization */
 .scrollbar-hide {
-  scrollbar-width: thin; /* Make the scrollbar thinner */
-  scrollbar-color: #b0b0b0 rgba(0, 0, 0, 0.05); /* Set the scrollbar color */
+  scrollbar-width: thin;
+  scrollbar-color: #b0b0b0 rgba(0, 0, 0, 0.05);
 }
 
 /* Hiding scrollbar for Webkit browsers (Chrome, Safari) */
