@@ -13,7 +13,7 @@ const NavbarFooterContainer: React.FC<NavbarFooterContainerProps> = ({
 
   return (
     <div
-      className={`w-full py-4 shadow-sm border-b transition-colors duration-300 ${
+      className={`w-full py-2 sm:py-4 shadow-sm border-b transition-colors duration-300 ${
         isDark
           ? "bg-slate-900 border-slate-800 text-gray-100"
           : "bg-white border-gray-200 text-gray-900"

@@ -1,20 +1,24 @@
 import React, { useEffect, useState } from "react";
 import Navbar from "../../components/navbar/Navbar";
 import Hero from "../../components/hero/Hero";
-import CardCollection from "../../components/card/CardCollection/CardCollection";
+import LevelingTopTen from "./LevelingTopTen";
+import LastReadSection from "./LastReadSection";
+import InfiniteMovingNewTitles from "../../components/card/InfiniteMovingNewTitles";
+import Modal from "../../components/modal/Modal";
+import WaitingAssetsLoader from "../../components/shared/WaitingAssetsLoader";
 import Footer from "../../components/footer/Footer";
 import { fetchAllComics } from "../../services/comicService";
 import { ComicItem } from "../../services/firebase";
 import { Link } from "react-router-dom";
 import { useLanguage } from "../../utils/i18n";
 import { useTheme } from "../../utils/ThemeProvider";
-
 import { motion } from "framer-motion";
 import SmoothScroll from "../../utils/SmoothScroll";
 
 const Home: React.FC = () => {
   const [comics, setComics] = useState<ComicItem[]>([]);
   const [loading, setLoading] = useState(true);
+  const [selectedComic, setSelectedComic] = useState<ComicItem | null>(null);
   const { t } = useLanguage();
   const { isDark } = useTheme();
 
@@ -32,21 +36,27 @@ const Home: React.FC = () => {
     loadData();
   }, []);
 
-  const topTenData = [...comics]
+  // Deduplicate comics by title to ensure 10 distinct top titles (#1 through #10)
+  const uniqueComics = Array.from(
+    new Map(comics.map((item) => [item.title.trim().toLowerCase(), item])).values()
+  );
+
+  const topTenData = [...uniqueComics]
     .sort((a, b) => b.rating - a.rating)
     .slice(0, 10);
 
-  const lastReadData = [...comics]
+  const lastReadData = [...uniqueComics]
     .sort((a, b) => new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime())
     .slice(0, 10);
 
-  const newTitlesData = [...comics]
+  const newTitlesData = [...uniqueComics]
     .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
     .slice(0, 10);
 
   return (
     <SmoothScroll>
-      <div className={`relative min-h-screen transition-colors duration-300 overflow-x-hidden ${
+      <WaitingAssetsLoader isLoading={loading} />
+      <div className={`relative min-h-screen transition-colors duration-300 ${
         isDark ? "bg-slate-950 text-gray-100" : "bg-gray-50 text-gray-900"
       }`}>
         <Navbar />
@@ -56,7 +66,7 @@ const Home: React.FC = () => {
         </div>
 
         <div className={`relative z-20 transition-colors duration-300 pb-20 ${
-          isDark ? "bg-slate-950" : "bg-gray-50"
+          isDark ? "bg-slate-950 text-gray-100" : "bg-gray-50 text-gray-900"
         }`}>
           {loading ? (
             <div className="flex flex-col items-center justify-center py-24 gap-3">
@@ -65,11 +75,33 @@ const Home: React.FC = () => {
             </div>
           ) : (
             <>
-              <CardCollection
+              {/* Section 2: Top 10 Podium Hierarchy */}
+              <LevelingTopTen
                 topTenData={topTenData}
-                lastReadData={lastReadData}
-                newTitlesData={newTitlesData}
+                onCardClick={(item) => setSelectedComic(item)}
               />
+
+              {/* Section 3: Last Read Activity Archives */}
+              <LastReadSection
+                lastReadData={lastReadData}
+                onCardClick={(item) => setSelectedComic(item)}
+              />
+
+              {/* Section 4: Newly Added Marquee Ribbon */}
+              <div className={`py-12 border-t transition-colors duration-300 ${
+                isDark ? "bg-slate-950 border-slate-900 text-white" : "bg-gray-50 border-gray-200 text-gray-900"
+              }`}>
+                <div className="max-w-7xl mx-auto px-4 mb-4">
+                  <h2 className="text-2xl sm:text-4xl font-black tracking-tight text-primary">
+                    Newly Added Titles
+                  </h2>
+                </div>
+                <InfiniteMovingNewTitles
+                  items={newTitlesData}
+                  speed="normal"
+                  onCardClick={(item) => setSelectedComic(item)}
+                />
+              </div>
 
               {/* Parallax & Animated CTA Banner */}
               <motion.div
@@ -77,12 +109,12 @@ const Home: React.FC = () => {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, margin: "-100px" }}
                 transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-                className="max-w-7xl mx-auto px-4 mt-16 text-center"
+                className="max-w-7xl mx-auto px-4 mt-12 text-center"
               >
-                <div className={`p-10 rounded-3xl border shadow-2xl relative overflow-hidden flex flex-col items-center justify-center gap-5 backdrop-blur-xl ${
+                <div className={`p-10 rounded-3xl border shadow-xl relative overflow-hidden flex flex-col items-center justify-center gap-5 backdrop-blur-xl transition-colors duration-300 ${
                   isDark
-                    ? "bg-slate-900/80 border-primary/30 text-white"
-                    : "bg-white/90 border-primary/20 text-gray-900"
+                    ? "bg-slate-900/90 border-slate-800 text-white"
+                    : "bg-white border-gray-200 text-gray-900"
                 }`}>
                   <div className="absolute -top-24 -right-24 w-72 h-72 bg-primary/20 rounded-full blur-3xl pointer-events-none" />
                   <div className="absolute -bottom-24 -left-24 w-72 h-72 bg-purple-500/20 rounded-full blur-3xl pointer-events-none" />
@@ -112,6 +144,14 @@ const Home: React.FC = () => {
             </>
           )}
         </div>
+
+        {selectedComic && (
+          <Modal
+            isOpen={!!selectedComic}
+            onClose={() => setSelectedComic(null)}
+            comic={selectedComic}
+          />
+        )}
 
         <Footer />
       </div>

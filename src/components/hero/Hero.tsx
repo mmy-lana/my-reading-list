@@ -1,23 +1,22 @@
 import React, { useRef, useState, useEffect } from "react";
 import "./Hero.css";
 import { useLanguage } from "../../utils/i18n";
+import { useTheme } from "../../utils/ThemeProvider";
 
 import kazumaImg from "../../assets/images/kazuma.jpg";
 import tsunaImg from "../../assets/images/tsuna.jpg";
 import mikaImg from "../../assets/images/mika_p.jpg";
 import teresaImg from "../../assets/images/teresa.jpeg";
-import { useTheme } from "../../utils/ThemeProvider";
 
 const Hero: React.FC = () => {
   const { t } = useLanguage();
+  const { isDark } = useTheme();
   const sliderRef = useRef<HTMLDivElement>(null);
   const isDragging = useRef(false);
   const startX = useRef(0);
   const currentRotation = useRef(0);
   const animationFrameId = useRef<number | null>(null);
   const autoRotateSpeed = 0.15;
-
-  const [isInteracting, setIsInteracting] = useState(false);
 
   const images = [
     { src: kazumaImg, alt: "Kazuma" },
@@ -49,11 +48,7 @@ const Hero: React.FC = () => {
 
   const handlePointerDown = (e: React.PointerEvent) => {
     isDragging.current = true;
-    setIsInteracting(true);
     startX.current = e.clientX;
-    if (sliderRef.current) {
-      sliderRef.current.style.animation = "none";
-    }
   };
 
   const handlePointerMove = (e: React.PointerEvent) => {
@@ -65,13 +60,8 @@ const Hero: React.FC = () => {
   };
 
   const handlePointerUp = () => {
-    if (isDragging.current) {
-      isDragging.current = false;
-      setIsInteracting(false);
-    }
+    isDragging.current = false;
   };
-
-  const { isDark } = useTheme();
 
   return (
     <div
@@ -85,7 +75,7 @@ const Hero: React.FC = () => {
     >
       <div
         ref={sliderRef}
-        className={`slider ${isInteracting ? "manual-rotate" : ""}`}
+        className="slider"
         style={{ "--quantity": images.length } as React.CSSProperties}
       >
         {images.map((image, index) => (
